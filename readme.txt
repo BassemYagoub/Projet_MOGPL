@@ -15,3 +15,10 @@ Q1.1
 min z = sum(i,j) di,j 	  //min des distances moyennes pour qqun en ville i vers ville j
 	| vj < gamma qqsoit j //ville j < gamma
 	| sum(i) xij = 1 	  //chaque unité est dans une seule ville (à un moment donné)
+
+
+k=3 alpha=0.1
+
+-------
+Méthode par flot max à cout min :
+Impossible à réaliser.
