@@ -10,21 +10,23 @@ import csv
 
 def importCSV(csv_name):
     """importe le csv d'un ensemble de ville et le retourne dans une matrice+dict"""
-    #matrice equivalente au csv
-    dist_matrice = [ [ '-1' for i in range(16) ] for j in range(16) ]
-    
-    #dictionaire Ville : Population vi
-    populations = {}
     
     #import csv
     i = 0
     with open(csv_name, newline='') as csvfile:
+        #matrice equivalente au csv
+        dist_matrice = [ [ '-1' for i in range(16) ] for j in range(16) ]
+        
+        #dictionaire Ville : Population vi
+        populations = {}
+    
         spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
         for row in spamreader:
             splitted_row = row[0].split(";")
             for j in range(0, len(splitted_row)-1):
-                dist_matrice[i][j] = splitted_row[j]
-                #print(dist_matrice[i][j])
+                if(splitted_row[j] != ""):
+                    dist_matrice[i][j] = splitted_row[j]
+                print(dist_matrice[i][j])
             i+= 1
 
     
@@ -36,23 +38,30 @@ def importCSV(csv_name):
         
 def gamma_val(alpha, k, populations):
     """retourne la valeur gamma a partir d'alpha, k et le vecteur de population/ville"""    
+    print(((1+alpha)/k), sum(populations.values()))
     return ((1+alpha)/k) * (sum(populations.values()))
 
 
 
 if __name__ == "__main__":
     dist_matrice, populations = importCSV('../ressources/villes.csv')
+    k = 3
+    alpha = 0.1
+    gamma = gamma_val(alpha, k, populations)
+    print("gamma = ", gamma, "alpha = ", alpha,", k = ", k)
     
-    gamma = gamma_val(0.1, 3, populations)
+    #calcul des coefficients (dij)
+    coefficients_dij = []
+    for i in range(1, len(dist_matrice)):
+        print("--------------------------------")
+        for j in range(2, len(dist_matrice[i])):
+            if(dist_matrice[i][j] != "-1" and dist_matrice[i][j] != "0"):
+                coefficients_dij = dist_matrice[i][j]
     
-    #EXEMPLE GUROBI TME
-    
-    """
-    nbcont=4 
-    nbvar=15*15 #x1,1 a x15,15
-    
-    # Range of plants and warehouses
+    nbcont=2 
     lignes = range(nbcont)
+    
+    nbvar=len(dist_matrice)*len(dist_matrice[0]) #x1,1 a x15,15
     colonnes = range(nbvar)
     
     # Matrice des contraintes
@@ -62,13 +71,13 @@ if __name__ == "__main__":
          [2,1]]
     
     # Second membre
-    b = [8, 6, 15, 18]
+    b = [gamma, 1]
     
     # Coefficients de la fonction objectif
-    c = [4, 10]
+    c = coefficients_dij
     
-    m = Model("mogplex")     
-            
+    m = Model("localisation_soins")     
+"""           
     # declaration variables de decision
     x = []
     for i in colonnes:
@@ -99,5 +108,4 @@ if __name__ == "__main__":
         print('x%d'%(j+1), '=', x[j].x)
     print("")
     print('Valeur de la fonction objectif :', m.objVal)
-    
-    """
+"""

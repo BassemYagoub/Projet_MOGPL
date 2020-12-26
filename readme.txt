@@ -12,10 +12,12 @@ Fichier qui sert de brouillon actuellement.
 
 Q1.1
 
-min z = sum(i,j) di,j 	  //min des distances moyennes pour qqun en ville i vers ville j
-	| vj < gamma qqsoit j //ville j < gamma
-	| sum(i) xij = 1 	  //chaque unité est dans une seule ville (à un moment donné)
+min z = sum(i,j) di,j * xi,j 	  //min des distances moyennes pour qqun en ville i vers ville j
+	| sum(i,j) vj*xij < gamma qqsoit j    //pop villes secteurs < gamma
+	| sum(i) xij = 1 	          //chaque unité est dans une seule ville (à un moment donné)
 
+
+C2 : si c'est seulement vj, vj < gamma sera toujours  vrai même avec k=5 t alpha=0.1
 
 k=3 alpha=0.1
 
