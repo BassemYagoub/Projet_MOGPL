@@ -41,10 +41,10 @@ if __name__ == "__main__":
     print("gamma =", gamma, "\nalpha =", alpha,", k =", k)
 
     
-    nbcont=k+len(dist_matrice)
+    nbcont = k+len(dist_matrice)
     lignes = range(nbcont)
     
-    nbvar=len(dist_matrice)*k
+    nbvar = len(dist_matrice)*k
     colonnes = range(nbvar)
 
     dist_sous_matrice = dist_matrice[:, :k]
@@ -58,10 +58,18 @@ if __name__ == "__main__":
         for j in range(len(populations)):
             a[i][j+incr] = populations[j]
         incr += len(dist_sous_matrice)
+            
+    # #Contrainte 2 (= toute la sous matrice n*k)
+    # cpt = 0
+    # for i in range(k, len(dist_sous_matrice)):
+    #     a.append([0]*nbvar)
+    #     for j in range(k):
+    #         a[i][i+j*len(dist_sous_matrice)] = 1
+    #         #cpt+= 1
     
     #Contrainte 2 (= toute la sous matrice n*k)
     cpt = 0
-    for i in range(k, len(dist_sous_matrice)):
+    for i in range(len(dist_sous_matrice)):
         a.append([0]*nbvar)
         for j in range(k):
             a[i][i+j*len(dist_sous_matrice)] = 1
@@ -69,8 +77,6 @@ if __name__ == "__main__":
 
     for row in a:
         print(row)
-            
-          
     
     # Second membre
     b = [gamma]*k+[1]*(nbcont-k)
@@ -108,14 +114,10 @@ if __name__ == "__main__":
     # definition de l'objectif
     m.setObjective(obj,GRB.MINIMIZE)
     
-    # Definition des contraintes
-    print(len(lignes),"aa", len(colonnes))
+    # Definition des contraintes  
+        
     for i in lignes:
-        print(i,j)
-        print("a",a[i][j])
-        print("x",x[j])
-        print("b",x[j])
-        m.addConstr(quicksum(a[i][j]*x[j] for j in colonnes) == b[i], "Contrainte ", i)
+        m.addConstr(quicksum(a[i][j]*x[j] for j in colonnes) == b[i], "Contrainte%d " % i)
     
     # Resolution
     m.optimize()
