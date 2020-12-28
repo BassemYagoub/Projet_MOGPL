@@ -12,7 +12,7 @@ Fichier qui sert de brouillon actuellement.
 
 Q1.1
 
-min z = sum(i,j) di,j * xi,j            //min des distances moyennes pour qqun en ville i vers ville j
+min z = (sum(i,j) di,j * xi,j)/n            //min des distances moyennes pour qqun en ville i vers ville j
 	| sum(i) vi*xij < gamma qqsoit j    //pop villes secteurs < gamma
 	| sum(j)   xij    = 1               //chaque ville n'a qu'un secteur de soin
 
