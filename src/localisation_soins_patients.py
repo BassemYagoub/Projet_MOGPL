@@ -47,6 +47,9 @@ if __name__ == "__main__":
     #sous-matrice n*k car le reste est inintéressant pour le PL
     dist_sous_matrice = dist_matrice[:, :k]
     
+    for row in dist_sous_matrice:
+        print(row.tolist())
+    print(populations,"\n")
     # Matrice des contraintes
     #Contrainte 1
     a = []
@@ -73,19 +76,15 @@ if __name__ == "__main__":
     print("SM\n", b)
     
     # Coefficients de la fonction objectif
-    #coefficients_dij = np.matrix(dist_sous_matrice).getA1()
     coefficients_dij = []
-    for i in range(len(dist_sous_matrice)):
-        for j in villes_soins:
-            coefficients_dij.append(dist_sous_matrice[i][j])
+    for ville in villes_soins:
+        coefficients_dij += dist_sous_matrice[:, ville:ville+1].flatten().tolist()
         
     print("COEFFS\n", coefficients_dij, "\n")
     
     c = coefficients_dij
     
-    
     m = Model("localisation_soins")     
-    
     
     # declaration variables de decision
     x = []
