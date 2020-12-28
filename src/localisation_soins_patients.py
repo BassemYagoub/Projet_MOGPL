@@ -117,7 +117,10 @@ if __name__ == "__main__":
     
                     
     print('\nSolution optimale:')
-    for j in colonnes:
-        print('x%d'%(j+1), '=', x[j].x)
+    for i in range(int(nbvar/k)):
+        for j in range(k):
+            print(int(x[i+(j*len(dist_sous_matrice))].x), end=' ')
+        print("\n", end='')
+        
     print('\nValeur de la fonction objectif :', m.objVal/len(dist_sous_matrice))
     
