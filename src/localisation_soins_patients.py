@@ -123,3 +123,19 @@ if __name__ == "__main__":
         
     print('\nValeur de la fonction objectif :', m.objVal/len(dist_sous_matrice))
     
+res = []
+temp = []
+for i in range(len(populations)*k):
+    temp.append(x[i].x)
+    if len(temp)==len(populations):
+        res.append(temp)
+        temp=[]
+
+di=0
+for i in range(len(res)):
+    for j in range(len(res[0])):
+        di+=dist_sous_matrice[j][i]*res[i][j]*populations[j]
+di/=sum(populations)
+
+print(di)
+    
