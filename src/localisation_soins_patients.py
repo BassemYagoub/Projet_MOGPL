@@ -37,11 +37,12 @@ if __name__ == "__main__":
     gamma = gamma_val(alpha, k, populations)
     print("gamma =", gamma, "\nalpha =", alpha,", k =", k)
 
+    n = len(dist_matrice) #nb villes
     
-    nbcont = k+len(dist_matrice)
+    nbcont = k+n
     lignes = range(nbcont)
     
-    nbvar = len(dist_matrice)*k
+    nbvar = n*k
     colonnes = range(nbvar)
     
     #sous-matrice n*k car le reste est inintéressant pour le PL
@@ -55,16 +56,16 @@ if __name__ == "__main__":
     a = []
     for i in range(k):
         a.append([0]*nbvar)
-        for j in range(len(populations)):
-            a[i][j+(i*len(dist_sous_matrice))] = populations[j]
+        for j in range(n):
+            a[i][j+(i*n)] = populations[j]
             
     
     #Contrainte 2 (= toute la sous matrice n*k)
-    for i in range(len(dist_sous_matrice)):
+    for i in range(n):
         a.append([0]*nbvar)
         for j in range(k):
             #i+k pour ne pas ecraser les k Contrainte1
-            a[i+k][i+j*len(dist_sous_matrice)] = 1
+            a[i+k][i+j*n] = 1
     
     for row in a:
         print(row)
@@ -101,13 +102,11 @@ if __name__ == "__main__":
     m.setObjective(obj,GRB.MINIMIZE)
     
     # Definition des contraintes  
-    cpt = 0
     for i in lignes:
-        if(cpt < k):
+        if(b[i] != 1):
             m.addConstr(quicksum(a[i][j]*x[j] for j in colonnes) <= b[i], "Contrainte%d " % i)
         else:
             m.addConstr(quicksum(a[i][j]*x[j] for j in colonnes) == b[i], "Contrainte%d " % i)
-        cpt+=1
     
     # Resolution
     m.optimize()
@@ -116,16 +115,16 @@ if __name__ == "__main__":
     print('\nSolution optimale:')
     for i in range(int(nbvar/k)):
         for j in range(k):
-            print(int(x[i+(j*len(dist_sous_matrice))].x), end=' ')
+            print(int(x[i+(j*n)].x), end=' ')
         print("\n", end='')
         
-    print('\nValeur de la fonction objectif :', m.objVal/len(dist_sous_matrice))
+    print('\nValeur de la fonction objectif :', m.objVal)
     
 res = []
 tmp = []
-for i in range(len(populations)*k):
+for i in range(n*k):
     tmp.append(x[i].x)
-    if len(tmp)==len(populations):
+    if len(tmp)==n:
         res.append(tmp)
         tmp=[]
 
