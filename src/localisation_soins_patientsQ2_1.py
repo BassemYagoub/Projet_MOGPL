@@ -12,7 +12,6 @@ def importCSV(csv_name):
     dist_matrice = np.genfromtxt(csv_name, delimiter=';', dtype=int, filling_values=0)
     noms_villes = np.genfromtxt(csv_name, delimiter=';', dtype=str, filling_values=0)[0, 1:]
     populations = dist_matrice[1:, 0]
-    print(noms_villes)
     dist_matrice = dist_matrice[1:, 2:] #on enleve les nom de lignes/colonnes + la pop
     dist_matrice += dist_matrice.T      #on remplie les cases vides par symétrie
     
@@ -38,20 +37,18 @@ if __name__ == "__main__":
 
     n = len(dist_matrice)
     
-    for row in dist_matrice:
+    """for row in dist_matrice:
         print(row.tolist())
-    print(populations,"\n")
+    print(populations,"\n")"""
     
     m = Model("localisation_soinsQ2_1")     
     
     # declaration variables de decision
     x_temp = []
-    ind = 0
     for i in range(n):
         x_temp.append([])
         for j in range(n):
-            x_temp[i].append(m.addVar(vtype=GRB.BINARY, lb=0, ub=1, name="x"+str(ind)))
-            ind += 1
+            x_temp[i].append(m.addVar(vtype=GRB.BINARY, lb=0, ub=1, name="x"+str(i+1)+","+str(j+1)))
     
     x = np.array(x_temp)
             
