@@ -75,9 +75,9 @@ if __name__ == "__main__":
         m.addConstr(np.dot(x[:,j], populations) <= (y[j]*gamma))
     
     for i in range(n):
-        m.addConstr(np.sum(x[i,:]) == 1, "Contrainte%d" % (k+i))
+        m.addConstr(np.sum(x[i,:]) == 1, "Contrainte%d" % (n+i))
         
-    m.addConstr(np.sum(y) == k) 
+    m.addConstr(np.sum(y) == k, "Contrainte%d" % (n+n+1)) 
     
     # Resolution
     m.optimize()
