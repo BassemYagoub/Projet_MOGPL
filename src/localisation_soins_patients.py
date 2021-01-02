@@ -32,7 +32,7 @@ if __name__ == "__main__":
     
     k = 3
     alpha = 0.2
-    villes_soins = [i for i in range(0, k)] #indice des villes choisies arbitrairement
+    villes_soins = [0,1,2] #indice des villes choisies arbitrairement
 
     gamma = gamma_val(alpha, k, populations)
     print("gamma =", gamma, "\nalpha =", alpha,", k =", k)
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     n = len(dist_matrice) #nb villes
     
     #sous-matrice n*k car le reste est inintéressant pour le PL
-    dist_sous_matrice = dist_matrice[:, :k]
+    dist_sous_matrice = dist_matrice[:, villes_soins]
     
     """for row in dist_sous_matrice:
         print(row.tolist())
@@ -79,10 +79,10 @@ if __name__ == "__main__":
     
     # Resolution
     m.optimize()
-
+    
     print('\Affectation optimale:\n')
-    for j in villes_soins:
-        print("Secteur",noms_villes[j+1], end=':\n\t')
+    for j in range(len(villes_soins)):
+        print("Secteur",noms_villes[villes_soins[j]+1], end=':\n\t')
         for i in range(n):
             if(int(x[:, j][i].x)) == 1:
                 print(noms_villes[i+1], end=', ')
