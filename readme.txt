@@ -1,28 +1,18 @@
-Fichier qui sert de brouillon actuellement.
-
-- n villes
-- vi = population ville i
-- k unités, k < n
-- xij = 1 si hab.i traité par j si besoin
-	  = 0 sinon
-- plusieurs villes i possibles pour un secteur j
-  mais pas l'inverse
-- dij = distance moy de ville i à secteur(ville) j
+Binome (GRP3) :
+Anthea RICHAUME
+Bassem YAGOUB
+---------------
 
 
-Q1.1
+Fichiers :
+    - src/ :
+        -func_utils.py
+            --> fonctions d'import de CSV, calcul de gamma et d'affichages réutilisées dans les différents fichiers
+        - localisations_soins_patientsQX_Y.py
+            --> fichiers contenant les programmes linéaires des Q1 et Q2
+        - equilibrage_unite.py
+            --> fichier contenant le programme linéaire répondant à la Q3
+    - ressources/ :
+        - fichiers utilisés pour extraire les données (seul le csv est utilisé dans le code)
 
-min z = (sum(i,j) di,j * xi,j)/n            //min des distances moyennes pour qqun en ville i vers ville j
-	| sum(i) vi*xij < gamma qqsoit j    //pop villes secteurs < gamma
-	| sum(j)   xij    = 1               //chaque ville n'a qu'un secteur de soin
 
-exemples : k=3, (les 3 premieres villes)
-C1: 340K*x21+310K*x31+...+152K*x151 < gamma | pour chaque j <=> k contraintes
-C2: x41+x42+x43 = 1                         | pour chaque ligne <=> 15 contraintes
-
-
-k=3 alpha=0.1
-
--------
-Méthode par flot max à cout min :
-Impossible à réaliser.

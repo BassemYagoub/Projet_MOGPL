@@ -1,30 +1,10 @@
-#Binome :
+#Binome (GRP3) :
 #Anthea RICHAUME
 #Bassem YAGOUB
 
-"""/!\ Le CSV a ete formate p/r a l'original"""
-
 from gurobipy import *
 import numpy as np
-
-def importCSV(csv_name):
-    """importe le csv d'un ensemble de villes et le retourne dans une matrice+vecteur"""
-    dist_matrice = np.genfromtxt(csv_name, delimiter=';', dtype=int, filling_values=0)
-    noms_villes = np.genfromtxt(csv_name, delimiter=';', dtype=str, filling_values=0)[0, 1:]
-    populations = dist_matrice[1:, 0]
-    
-    dist_matrice = dist_matrice[1:, 2:] #on enleve les nom de lignes/colonnes + la pop
-    dist_matrice += dist_matrice.T      #on remplie les cases vides par symétrie
-    
-    return dist_matrice, populations, noms_villes
-
-
-def gamma_val(alpha, k, populations):
-    """retourne la valeur gamma a partir d'alpha, k et le vecteur de population/ville"""    
-    #print(((1+alpha)/k), sum(populations.values()))
-    return ((1+alpha)/k) * (populations.sum())
-
-
+from func_utils import *
 
 if __name__ == "__main__":
     #valeurs et constantes necessaires au PL
@@ -32,7 +12,7 @@ if __name__ == "__main__":
     
     k = 3
     alpha = 0.2
-    villes_soins = [0,1,2] #indice des villes choisies arbitrairement
+    villes_soins = [i for i in range(0, k)] #indice des villes choisies arbitrairement
 
     gamma = gamma_val(alpha, k, populations)
     print("gamma =", gamma, "\nalpha =", alpha,", k =", k)
@@ -42,13 +22,9 @@ if __name__ == "__main__":
     #sous-matrice n*k car le reste est inintéressant pour le PL
     dist_sous_matrice = dist_matrice[:, villes_soins]
     
-    """for row in dist_sous_matrice:
-        print(row.tolist())
-    print(populations,"\n")"""
-    
     m = Model("localisation_soins")     
     
-    # declaration variables de decision
+    # Declaration variables de decision
     x_temp = []
     for i in range(n):
         x_temp.append([])
@@ -67,7 +43,7 @@ if __name__ == "__main__":
             obj += dist_sous_matrice[i][j] * x[i][j] * populations[i]
     obj /= sum(populations)
             
-    # definition de l'objectif
+    # Definition de l'objectif
     m.setObjective(obj,GRB.MINIMIZE)
     
     # Definition des contraintes  
@@ -80,13 +56,6 @@ if __name__ == "__main__":
     # Resolution
     m.optimize()
     
-    print('\Affectation optimale:\n')
-    for j in range(len(villes_soins)):
-        print("Secteur",noms_villes[villes_soins[j]+1], end=':\n\t')
-        for i in range(n):
-            if(int(x[:, j][i].x)) == 1:
-                print(noms_villes[i+1], end=', ')
-        print("\n")
-    
-    print('\nValeur de la fonction objectif :', m.objVal)
-    
+    # Affichage
+    displayResultQ1(k, n, x, y, noms_villes, villes_soins, m)
+

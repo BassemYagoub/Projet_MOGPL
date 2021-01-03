@@ -1,4 +1,4 @@
-#Binome :
+#Binome (GRP3) :
 #Anthea RICHAUME
 #Bassem YAGOUB
 
@@ -6,24 +6,7 @@
 
 from gurobipy import *
 import numpy as np
-
-def importCSV(csv_name):
-    """importe le csv d'un ensemble de villes et le retourne dans une matrice+vecteur"""
-    dist_matrice = np.genfromtxt(csv_name, delimiter=';', dtype=int, filling_values=0)
-    noms_villes = np.genfromtxt(csv_name, delimiter=';', dtype=str, filling_values=0)[0, 1:]
-    populations = dist_matrice[1:, 0]
-    dist_matrice = dist_matrice[1:, 2:] #on enleve les nom de lignes/colonnes + la pop
-    dist_matrice += dist_matrice.T      #on remplie les cases vides par symétrie
-    
-    return dist_matrice, populations, noms_villes
-
-
-def gamma_val(alpha, k, populations):
-    """retourne la valeur gamma a partir d'alpha, k et le vecteur de population/ville"""    
-    #print(((1+alpha)/k), sum(populations.values()))
-    return ((1+alpha)/k) * (populations.sum())
-
-
+import func_utils
 
 if __name__ == "__main__":
     #valeurs et constantes necessaires au PL
@@ -37,13 +20,9 @@ if __name__ == "__main__":
 
     n = len(dist_matrice)
     
-    """for row in dist_matrice:
-        print(row.tolist())
-    print(populations,"\n")"""
-    
     m = Model("localisation_soinsQ2_2")     
     
-    # declaration variables de decision
+    # Declaration variables de decision
     x_temp = []
     for i in range(n):
         x_temp.append([])
@@ -62,7 +41,7 @@ if __name__ == "__main__":
     m.update()
     
             
-    # definition de l'objectif
+    # Definition de l'objectif
     obj = LinExpr();
     obj = max_d_vi_fi
 
@@ -90,15 +69,6 @@ if __name__ == "__main__":
     # Resolution
     m.optimize()
     
-             
-    print('\Affectation optimale:\n')
-    for j in range(n):
-        if(int(y[j].x) == 1):
-            print("Secteur",noms_villes[j+1], end=':\n\t')
-            for i in range(n):
-                if(int(x[:, j][i].x)) == 1:
-                    print(noms_villes[i+1], end=', ')
-            print("\n")
-    
-    print('\nValeur de la fonction objectif :', m.objVal)
+    # Affichage
+    displayResultQ2(n, n, x, y, noms_villes, m, dist_matrice, False)
     
