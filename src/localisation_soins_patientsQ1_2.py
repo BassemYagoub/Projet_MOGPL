@@ -22,7 +22,7 @@ if __name__ == "__main__":
     #sous-matrice n*k car le reste est inintéressant pour le PL
     dist_sous_matrice = dist_matrice[:, villes_soins]
     
-    m = Model("localisation_soins")     
+    m = Model("localisation_soins_Q1_2")     
     
     # Declaration variables de decision
     x_temp = []
