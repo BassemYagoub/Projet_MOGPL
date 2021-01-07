@@ -57,5 +57,4 @@ if __name__ == "__main__":
     m.optimize()
     
     # Affichage
-    displayResultQ1(k, n, x, y, noms_villes, villes_soins, m)
-
+    displayResultQ1(k, n, x, noms_villes, villes_soins, m)

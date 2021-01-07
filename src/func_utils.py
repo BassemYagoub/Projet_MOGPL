@@ -26,7 +26,7 @@ def gamma_val(alpha, k, populations):
     return ((1+alpha)/k) * (populations.sum())
 
 #l'affichage dans Q1 et Q2 sont un peu différents d'ou les 2 fonctions (pour eviter un tas de if)
-def displayResultQ1(k, n, x, y, noms_villes, villes_soins, m):    
+def displayResultQ1(k, n, x, noms_villes, villes_soins, m):    
     """affiche l'affectation secteur j : ville_i_secteur_j pour chaque ville et chaque secteur
        et affiche la valeur de la fonction objectif
     """
